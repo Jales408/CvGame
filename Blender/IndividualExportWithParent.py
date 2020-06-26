@@ -67,10 +67,10 @@ class USEFUL_CUSTOM_OT_export_parented_operator(bpy.types.Operator):
             if(ROTATE_OPTION):
                 obj.select_set(True)
                 bpy.context.view_layer.objects.active = obj
-                bpy.ops.object.transform_apply( scale=True, rotation = True )
+                bpy.ops.object.transform_apply( location = False, scale=True, rotation = True )
                 obj.rotation_euler.x -= x_offset
                 bpy.context.view_layer.objects.active = obj
-                bpy.ops.object.transform_apply( rotation = True )
+                bpy.ops.object.transform_apply( location = False, scale=False, rotation = True )
                 obj.rotation_euler.x += x_offset
             bpy.ops.object.mode_set(mode='OBJECT')
             name = bpy.path.clean_name(obj.name)
