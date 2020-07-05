@@ -5,7 +5,6 @@ using UnityEngine;
 
 [RequireComponent( typeof(Animator))]
 [RequireComponent( typeof(CharacterController))]
-[RequireComponent( typeof(IAAstonauteFollower))]
 public class IAAstonauteController : MonoBehaviour
 {
     private CharacterController controller;
@@ -16,41 +15,67 @@ public class IAAstonauteController : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     public float turnSmoothVelocity;
     private bool isFollowingTarget;
-    private bool isStaticPositionReach;
+    private bool isStaticPositionReach = true;
+
+    private Vector3 positionToKeep;
+
+    private int positionFollowing;
+
+    [Space(20)]
+    public string[] randomIdleName;
+
+    private int actualIdle = 0;
+    public float randomIdleTimeMax = 10.0f;
+
+    private IEnumerator idleCoroutine;
+
+    IEnumerator changeIdle(float time){
+        
+        animator.SetBool(randomIdleName[actualIdle],false);
+        actualIdle = Random.Range(0,randomIdleName.Count());
+        animator.SetBool(randomIdleName[actualIdle],true);
+        yield return new WaitForSeconds(time);
+        idleCoroutine = changeIdle(Random.Range(0.4f*randomIdleTimeMax,randomIdleTimeMax));
+        StartCoroutine(idleCoroutine);
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
-        IAfollower = GetComponent<IAAstonauteFollower>();
+        positionToKeep = transform.position;
+        idleCoroutine = changeIdle(0.0f);
+        StartCoroutine(idleCoroutine);
     }
 
-    public void StartFollow(GameObject target, int placeInQueue){
-        isFollowingTarget = true;
-        IAfollower.FollowTarget(target, placeInQueue);
+    public void StartFollow(GameObject target){
+        if(!isFollowingTarget){
+            isFollowingTarget = true;
+            IAfollower = target.GetComponent<IAAstonauteFollower>();
+            positionFollowing = IAfollower.FollowTarget(this.gameObject);
+            //effect
+            StopCoroutine(idleCoroutine);
+            animator.SetBool(randomIdleName[actualIdle],false);
+        }
     }
 
     public void StopFollow(Vector3 positionToKeep){
         isFollowingTarget = false;
-        IAfollower.KeepPosition(positionToKeep);
+        StartCoroutine(changeIdle(0.0f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isFollowingTarget){
-            MoveToNextPosition();
-        }
-        else{
-            if(!isStaticPositionReach){
+            if(!isStaticPositionReach||isFollowingTarget){
                 MoveToNextPosition();
-            }
-        }       
+            }    
     }
 
     private void MoveToNextPosition(){
-        Vector3 followedPosition = IAfollower.getNextPosition();
+        Vector3 followedPosition =(isFollowingTarget)?IAfollower.getNextPosition(positionFollowing): positionToKeep;
         Vector3 positionGap = followedPosition - transform.position;
-        float minDistanceToMove = IAfollower.getFollowedDistance();
+        float minDistanceToMove = speed/10f;
         if(positionGap.magnitude>minDistanceToMove){
             Vector3 direction = positionGap.normalized;
             float targetAngle = Mathf.Atan2(direction.x,direction.z)*Mathf.Rad2Deg;
@@ -60,7 +85,6 @@ public class IAAstonauteController : MonoBehaviour
             animator.SetFloat("Speed",1f);
         }
         else{
-            
             animator.SetFloat("Speed",0f);
             isStaticPositionReach = true;
         } 

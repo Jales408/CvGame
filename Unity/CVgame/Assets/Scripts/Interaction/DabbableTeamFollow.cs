@@ -6,12 +6,11 @@ public class DabbableTeamFollow : MonoBehaviour, IDabbable
 {
     public GameObject visualEffect;
 
-    public List<IAAstonauteController> followers = new List<IAAstonauteController>();
+    public IAAstonauteController controller;
+
     public void Dab(GameObject dabAuthor){
         visualEffect.SetActive(false);
-        for(int i=0; i<followers.Count;i++){
-            followers[i].StartFollow(dabAuthor,i+1);
-        }
-        Destroy(this);
+        visualEffect.SetActive(true);
+        controller.StartFollow(dabAuthor);
     }
 }

@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class IAAstonauteFollower : MonoBehaviour
 {
-    public GameObject targetToFollow;
-    [Space(10)]
-    public float stepBehindLenght;
 
+    public int followingDistance;
+ 
     public int precision;
 
     private List<Vector3> successivesPositions = new List<Vector3>();
@@ -16,37 +15,33 @@ public class IAAstonauteFollower : MonoBehaviour
     private bool isFollowing;
 
     private float stepSize;
+    private int numberOfFollowers;
 
-    private Vector3 staticPosition;
     void Start()
     {
-        staticPosition = transform.position;
-        stepSize = stepBehindLenght/precision;
+        stepSize = ((float)followingDistance)/precision;
     }
 
-    public void FollowTarget(GameObject target, int placeInQueue){
+    public int FollowTarget(GameObject follower){
         isFollowing = true;
-        targetToFollow = target;
-        Vector3 initialPosition = transform.position;
-        Vector3 targetPosition = target.transform.position;
-        int stepCount = placeInQueue*precision;
-        int stepOnTheWay = Mathf.Min(Mathf.CeilToInt((initialPosition-targetPosition).magnitude/stepSize),stepCount);
+        Vector3 initialPosition = follower.transform.position;
+        Vector3 targetPosition = (successivesPositions.Count==0)?transform.position:successivesPositions[0];
+        numberOfFollowers++;
+        int stepCountToAdd = precision;
+        int stepOnTheWay = Mathf.Min(Mathf.CeilToInt((initialPosition-targetPosition).magnitude/stepSize),stepCountToAdd);
         Vector3 direction = (targetPosition-initialPosition).normalized;
-        successivesPositions = new List<Vector3>();
-        if(stepOnTheWay!=stepCount){
-            successivesPositions.AddRange(Enumerable.Repeat(initialPosition,stepCount-stepOnTheWay));
-        }
         
-        for (int i = stepOnTheWay-1; i >= 0 ; i--)
-        {
-            successivesPositions.Add(targetPosition-i*direction*stepSize);
+        if(stepOnTheWay!=stepCountToAdd){
+            successivesPositions.InsertRange(0,Enumerable.Repeat(initialPosition,stepCountToAdd-stepOnTheWay));
         }
+        for (int i = 0; i < stepOnTheWay; i++)
+        {
+            successivesPositions.Insert(0,targetPosition-i*direction*stepSize);
+        }
+
+        return(numberOfFollowers);
     }
 
-    public void KeepPosition(Vector3 positionToKeep){
-        isFollowing =false;
-        staticPosition = positionToKeep;
-    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -56,25 +51,18 @@ public class IAAstonauteFollower : MonoBehaviour
     }
 
     private void ActualizePosition(){
-        if((successivesPositions.Last() - targetToFollow.transform.position).magnitude>stepSize)
+        if((successivesPositions.Last() - transform.position).magnitude>stepSize)
         {
             successivesPositions.RemoveAt(0);
-            successivesPositions.Add(targetToFollow.transform.position);
+            successivesPositions.Add(transform.position);
         }
     }
 
-    public Vector3 getNextPosition(){
-        if(isFollowing){
-            return successivesPositions[0];
-        }
-        else{
-            return staticPosition;
-        }
-
+    public Vector3 getNextPosition(int positionFollowing){
+    return successivesPositions[(numberOfFollowers - positionFollowing)*precision];
     }
 
     public float getFollowedDistance(){
         return stepSize;
-
     }
 }
