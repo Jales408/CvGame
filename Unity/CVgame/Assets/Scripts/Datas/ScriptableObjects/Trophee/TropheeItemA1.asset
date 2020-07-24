@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUnlocked: 1
   Identifier: A1
-  Logo: {fileID: 21300000, guid: 514b0ab3937fae64cb79f9a2755bd1ad, type: 3}
-  Title: Apprendre les bases
-  Description: "Tout pour dompter le monde. Tout pour s'imposer. Tout pour faire
-    preuve d'humanit\xE9."
+  Logo: {fileID: 854161238491457826, guid: 1bb3326b34e692c4b8a16f196dbd5bfa, type: 3}
+  Title: Capitaine au long cours
+  Description: "Pr\xEAt \xE0 prendre le large avec le bagage n\xE9cesssaire. "
   Competence1: CONNAISSANCES +15
   Competence2: PERSEVERANCE +12
-  ShortDescription: Tout pour dompter le monde. Tout pour s'imposer.
+  ShortDescription: "Pr\xEAt \xE0 prendre le large avec le bagage n\xE9cesssaire. "

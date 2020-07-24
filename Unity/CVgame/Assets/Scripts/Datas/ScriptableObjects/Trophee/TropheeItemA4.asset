@@ -15,7 +15,7 @@ MonoBehaviour:
   isUnlocked: 0
   Identifier: A4
   Logo: {fileID: 21300000, guid: 514b0ab3937fae64cb79f9a2755bd1ad, type: 3}
-  Title: Apprendre les bases
+  Title: Fil d'Ariane
   Description: "Tout pour dompter le monde. Tout pour s'imposer. Tout pour faire
     preuve d'humanit\xE9."
   Competence1: CONNAISSANCES +15

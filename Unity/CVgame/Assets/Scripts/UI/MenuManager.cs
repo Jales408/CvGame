@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class MenuManager : MonoBehaviour
 {
     public GameObject PausePanel;
+
+    public Button firstButtonSelected;
 
     [Space(20)]
 
@@ -21,11 +24,7 @@ public class MenuManager : MonoBehaviour
         else{
             Time.timeScale = 1f;  
         }
+        firstButtonSelected.Select();
     }
 
-    private void Update() {
-        if(Input.GetButtonDown("Cancel")){
-            TogglePause();
-        }
-    }
 }

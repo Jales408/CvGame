@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUnlocked: 0
   Identifier: A2
-  Logo: {fileID: 21300000, guid: 514b0ab3937fae64cb79f9a2755bd1ad, type: 3}
-  Title: Apprendre les bases
+  Logo: {fileID: 8716208702549715966, guid: 1bb3326b34e692c4b8a16f196dbd5bfa, type: 3}
+  Title: Cerveau electronique
   Description: "Tout pour dompter le monde. Tout pour s'imposer. Tout pour faire
     preuve d'humanit\xE9."
   Competence1: CONNAISSANCES +15

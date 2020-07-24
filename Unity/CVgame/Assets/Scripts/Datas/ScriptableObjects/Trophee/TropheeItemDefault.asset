@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 337917db892e536449de3a0e6e46cad4, type: 3}
   m_Name: TropheeItemDefault
   m_EditorClassIdentifier: 
-  Logo: {fileID: 21300000, guid: 514b0ab3937fae64cb79f9a2755bd1ad, type: 3}
+  isUnlocked: 0
+  Identifier: 
+  Logo: {fileID: 5433213916786415718, guid: 1bb3326b34e692c4b8a16f196dbd5bfa, type: 3}
   Title: Progresssion en attente
   Description: "Continuer \xE0 explorer"
   Competence1: DECOUVERTE +?-*\

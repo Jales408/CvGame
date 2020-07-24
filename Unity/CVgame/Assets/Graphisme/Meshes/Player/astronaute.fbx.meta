@@ -9,6 +9,21 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: AstroGlass
     second: {fileID: 2100000, guid: 37b132b4fb5808f46bd8d409c9e63712, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AstronauteGant
+    second: {fileID: 2100000, guid: 9314ea55d84c9674a8420a80be6717f0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MainAstronauteCombinaison
+    second: {fileID: 2100000, guid: 2b1d2ccefe7e59740a4aa68dea8df8be, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MainAstronauteLimit
+    second: {fileID: 2100000, guid: caa8cc24db2555b4bb4a0d5edc76f123, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
