@@ -4,8 +4,9 @@ using UnityEngine;
 
 public interface IWeapon 
 {
-    void pullTrigger();
-    void desactivate();
-    void placeInHand(Transform hand);
+    void PullTrigger();
+    void ReleaseTrigger();
+    void Desactivate();
+    void PlaceInHand(Transform hand);
 }
 

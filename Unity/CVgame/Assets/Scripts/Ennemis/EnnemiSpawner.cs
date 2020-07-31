@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnnemiSpawner : MonoBehaviour
+public class EnnemiSpawner : MonoBehaviour, iSpawner
 {
     public GridPathFinder pathFinder;
     public GameObject[] ennemisSpawning;
@@ -11,7 +11,7 @@ public class EnnemiSpawner : MonoBehaviour
     private float spawnTimeCounter = 0.0f;
     public float spawnRateRandomness = 0.8f;
     // Start is called before the first frame update
-    public bool isSpawning = true;
+    public bool isSpawning;
     void Start()
     {
         
@@ -29,6 +29,20 @@ public class EnnemiSpawner : MonoBehaviour
                 GameObject ennemi= Instantiate(ennemisSpawning[Random.Range(0,ennemisSpawning.Length)],randomPosition,Quaternion.identity,transform);
                 ennemi.GetComponent<EnnemiController>().Initialize(pathFinder);
             }
+        }
+    }
+
+    public void SpawnUnit()
+    {
+        isSpawning = true;
+    }
+
+    public void CleanUnit()
+    {
+        isSpawning = false;
+        iSpawnable[] spawnables = transform.GetComponentsInChildren<iSpawnable>();
+        foreach(iSpawnable spawnable in spawnables){
+            spawnable.Clean();
         }
     }
 }

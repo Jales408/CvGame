@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnnemiController : MonoBehaviour
+public class EnnemiController : MonoBehaviour, iLazerable, iSpawnable
 {
 
     public float speed = 10.0f;
@@ -31,6 +31,9 @@ public class EnnemiController : MonoBehaviour
     private float turnSmoothVelocity;
 
     private float YOffset = 90f;
+
+    private float life = 1;
+    private bool temporarySlowDown;
 
     void Start()
     {
@@ -73,6 +76,14 @@ public class EnnemiController : MonoBehaviour
         animator.SetBool("Explode",true);
     }
 
+    public void Lazer(float amount){
+        life-=amount;
+        if(life<0f){
+            Explode();
+        }
+        temporarySlowDown = true;
+    }
+
     private void CheckExplosionContact(){
         Vector3 targetPosition = target.transform.position;
         Vector3 position = transform.position;
@@ -108,7 +119,8 @@ public class EnnemiController : MonoBehaviour
                 refreshPath();
             }
         }
-        rb.MovePosition(transform.position + (positionDifference.normalized * speed * Time.fixedDeltaTime));
+        rb.MovePosition(transform.position + (positionDifference.normalized * ((temporarySlowDown)?0.25f:1f) * speed * Time.fixedDeltaTime));
+        temporarySlowDown = false;
         float targetAngle = Mathf.Atan2(positionDifference.x,positionDifference.z)*Mathf.Rad2Deg;
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetAngle,ref turnSmoothVelocity, 0.01f);
         transform.rotation = Quaternion.Euler(0f,angle+YOffset,0f);
@@ -138,5 +150,10 @@ public class EnnemiController : MonoBehaviour
             this.targetCanMove = objective.isMoving;
             refreshPath();
         }
+    }
+
+    public void Clean()
+    {
+        Explode();
     }
 }

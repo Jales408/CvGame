@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 337917db892e536449de3a0e6e46cad4, type: 3}
   m_Name: TropheeItemA3
   m_EditorClassIdentifier: 
-  isUnlocked: 0
+  isUnlocked: 1
   Identifier: A3
-  Logo: {fileID: 21300000, guid: 514b0ab3937fae64cb79f9a2755bd1ad, type: 3}
+  Logo: {fileID: -1683703620955948514, guid: 1bb3326b34e692c4b8a16f196dbd5bfa, type: 3}
   Title: Boss de fin
   Description: "Tout pour dompter le monde. Tout pour s'imposer. Tout pour faire
     preuve d'humanit\xE9."

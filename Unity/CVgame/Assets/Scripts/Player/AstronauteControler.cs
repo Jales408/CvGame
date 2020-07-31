@@ -5,12 +5,13 @@ using UnityEngine.InputSystem;
 
 [RequireComponent( typeof(Animator))]
 [RequireComponent( typeof(CharacterController))]
+[RequireComponent(typeof(InputActions))]
 public class AstronauteControler : MonoBehaviour
 {
     public float speed = 3f,stunTime = 1.8f,turnSmoothTime = 0.1f,gravity=1.0f;
     public Transform weaponPlacement;
     
-    private bool dab, shoot, sprint, stun;
+    private bool dab, sprint, stun;
     private float turnSmoothVelocity, actualStunTime;
     private Vector2 movingDirection;
     private IWeapon weapon;
@@ -18,30 +19,33 @@ public class AstronauteControler : MonoBehaviour
     private Animator animator;
 
     private MenuManager menuManager;
-
     private DialogManager dialogManager;
 
     private bool isDialoguing;
 
     private List<IDabbable> dabbablesInRange = new List<IDabbable>();
-    void Start()
-    {
+
+    private void Awake() {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         menuManager = FindObjectOfType<MenuManager>();
         dialogManager = FindObjectOfType<DialogManager>();
+        
+    }
+    void Start()
+    {
         dialogManager.SaveInteractor(this);
     }
 
     public void TakeWeapon(IWeapon newWeapon){
         if(weapon!=null){
-            weapon.desactivate();
+            weapon.Desactivate();
         }        
         else{
             animator.SetBool("CarryingWeapon",true);
         }
         weapon = newWeapon;
-        weapon.placeInHand(weaponPlacement);
+        weapon.PlaceInHand(weaponPlacement);
     }
 
     // Update is called once per frame
@@ -60,42 +64,44 @@ public class AstronauteControler : MonoBehaviour
             dab=false;
             Dab();
         }
-        if(shoot){
-            shoot = false;
-            if(weapon!=null){
-                weapon.pullTrigger();
-            }
-        }
     }
 
     void OnDab(){
-        if(Time.timeScale==0f || isDialoguing){
+        if(Time.timeScale==0f || isDialoguing || stun){
             return;
         }
         dab = true;
     }
 
-    void OnShoot(){
-        if(Time.timeScale==0f){
+    void OnShoot(InputValue value){
+        if(Time.timeScale==0f || stun){
         return;
         }
-        if(isDialoguing) {
+        bool buttonPress = System.Convert.ToBoolean(value.Get<float>());
+        if(isDialoguing && buttonPress) {
             dialogManager.DisplayNextSentence();
             return;
         }
-        shoot = true;
+        if(weapon!=null){
+            if(buttonPress){
+                weapon.PullTrigger();
+            }
+            else{
+                weapon.ReleaseTrigger();
+            } 
+        }
     }
 
-    void OnSprint(){
-        if(Time.timeScale==0f || isDialoguing){
-            return;
-        }
-        sprint = !sprint;
+    void OnSprint(InputValue value){
+        sprint = System.Convert.ToBoolean(value.Get<float>());
     }
 
     void OnEnnemiTouch(){
         if(stun){
             return;
+        }
+        if(weapon!=null){
+            weapon.ReleaseTrigger();
         }
         actualStunTime = stunTime;
         stun = true;
